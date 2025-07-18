@@ -1,0 +1,25 @@
+# docker-compose.yml 
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo:7           # utilise la dernière 7.x stable
+    container_name: mongo-tipeak
+    restart: unless-stopped  # redémarre auto si le VPS reboot
+    ports:
+      - "27017:27017"        # host:container
+    environment:
+      MONGO_INITDB_DATABASE: tipeak
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    volumes:
+      - mongodata:/data/db   # volume nommé
+    networks:
+      - tipnet
+
+volumes:
+  mongodata:                 # déclare le volume persistant
+
+networks:
+  tipnet:
+    driver: bridge

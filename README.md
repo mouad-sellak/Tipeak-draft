@@ -85,7 +85,7 @@ Tipeak/
 
 ---
 
-## Installation rapide
+
 
 ### 1. Cloner le repo & Lancer le projet
 ```bash
@@ -109,3 +109,20 @@ npm run dev
 cd client
 npm run dev
 
+```
+---
+
+
+### Manipuler la base sur Docker
+
+```bash
+cd ..
+docker-compose up -d
+docker logs -f mongo-teapik
+docker volume ls
+
+docker exec -it mongo-tipeak bash
+mongosh -u admin -p admin 
+use tipeak
+show collections
+db.collection.find()
