@@ -14,6 +14,7 @@ const { connectDB } = require('./config/db');
 
 // Routes
 const healthRouter = require('./routes/health');
+const authRouter   = require('./routes/auth');
 
 async function bootstrap() {
   // 1) Connexion Mongo
@@ -29,10 +30,11 @@ async function bootstrap() {
 
   // 4) Routes
   app.use('/api/health', healthRouter);
+  app.use('/api/auth', authRouter);
 
   // debug root
   app.get('/', (req, res) => {
-    res.send('Tip MVP API en ligne (F01 DB connectée).');
+    res.send('Tipeak API en ligne (F01 DB connectée).');
   });
 
   // 5) Lancement serveur
