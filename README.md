@@ -1,4 +1,4 @@
-# Tip MVP – Pourboires via QR + Stripe (React / Express / Mongo / Tailwind)
+# Tipeak – Pourboires via QR + Stripe (React / Express / Mongo / Tailwind)
 
 > **MVP pédagogique** : Un pro (serveur, artiste, coach…) peut recevoir des pourboires via une page publique accessible par **QR code**. Les clients scannent, choisissent un montant rapide (2€, 5€, 10€) ou libre, et paient via **Stripe Checkout (mode test)**. Le pro voit ensuite ses pourboires dans un **tableau de bord**.  
 
@@ -41,7 +41,7 @@ Admin crée Pro -> Genère QR -> Client scanne -> Page /slug -> Choisit montant 
 |----|---------|--------|-------------|
 | F00 | Init Projet & Outillage | Monorepo, lint, env, health check |
 | F01 | Connexion Mongo & Modèles | User + Tip (Mongoose), seed script |
-| F02 | Auth basique (JWT) | ⏳ | Register admin, login, me |
+| F02 | Auth basique (JWT)  | Register admin, login, me |
 | F03 | CRUD Pro (Admin) | | Créer pros + update |
 | F04 | Public Pro endpoint | | GET /public/pro/:slug |
 | F05 | Tip Checkout (Stripe test) | | Paiement & Tip pending |
@@ -101,15 +101,19 @@ db.collection.find()
 
 ### Manipuler les commandes git
 
-
+```bash
 git status
 git branch
 
-git chekout -b feature/FXX-feature-name
+[loop start]
+git checkout -b feature/FXX-feature-name
 git add file1 file2
 git commit -m "commit message"
 git push origin featre/FXX-feature-name
 [Create PR and Merge in Github]
 git checkout main
 git pull origin main
+[end loop]
 
+```
+---
