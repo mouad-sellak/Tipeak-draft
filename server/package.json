@@ -18,7 +18,8 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.16.4"
+    "mongoose": "^8.16.4",
+    "qrcode": "^1.5.4"
   },
   "devDependencies": {
     "eslint": "^9.9.0",

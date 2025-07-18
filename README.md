@@ -2,26 +2,11 @@
 
 > **MVP pédagogique** : Un pro (serveur, artiste, coach…) peut recevoir des pourboires via une page publique accessible par **QR code**. Les clients scannent, choisissent un montant rapide (2€, 5€, 10€) ou libre, et paient via **Stripe Checkout (mode test)**. Le pro voit ensuite ses pourboires dans un **tableau de bord**.  
 
-Flux utilisateur (MVP) : 
+> Flux utilisateur (MVP) : 
 Admin crée Pro -> Genère QR -> Client scanne -> Page /slug -> Choisit montant -> Stripe Checkout -> Retour succès -> Tip marqué payé -> Pro voit ses tips + total.
 
 > Projet conçu pour **apprendre fullstack** : React + Tailwind + Express + MongoDB + intégration Stripe.
 
----
-
-## Table des matières
-- [Objectif](#objectif)
-- [Stack technique](#stack-technique)
-- [Architecture dossier](#architecture-dossier)
-- [Roadmap Features (F00→F11)](#roadmap-features-f00f11)
-- [Installation rapide](#installation-rapide)
-- [Variables d'environnement](#variables-denvironnement)
-- [Commandes de développement](#commandes-de-développement)
-- [Flux utilisateur (MVP)](#flux-utilisateur-mvp)
-- [Qualité code (Lint / Format)](#qualité-code-lint--format)
-- [Commits & branches (workflow Fxx)](#commits--branches-workflow-fxx)
-- [Démo & livrables](#démo--livrables)
-- [Licence](#licence)
 
 ---
 
@@ -49,29 +34,13 @@ Admin crée Pro -> Genère QR -> Client scanne -> Page /slug -> Choisit montant 
 
 ---
 
-## Architecture dossier (monorepo)
-
-Tipeak/
-├── client/ # Front React + Vite + Tailwind
-├── server/ # API Express
-├── .editorconfig
-├── .eslintrc.cjs # règles globales
-├── .prettierrc.json
-├── .gitignore
-└── README.md # ce fichier
-
-
-
-> Chaque sous-projet a son propre `package.json` et sa config ESLint.
-
----
 
 ## Roadmap Features (F00→F11)
 
 | ID | Feature | Statut | Description |
 |----|---------|--------|-------------|
-| F00 | Init Projet & Outillage | ✅ Done | Monorepo, lint, env, health check |
-| F01 | Connexion Mongo & Modèles | 🔜 | User + Tip (Mongoose), seed script |
+| F00 | Init Projet & Outillage | Monorepo, lint, env, health check |
+| F01 | Connexion Mongo & Modèles | User + Tip (Mongoose), seed script |
 | F02 | Auth basique (JWT) | ⏳ | Register admin, login, me |
 | F03 | CRUD Pro (Admin) | | Créer pros + update |
 | F04 | Public Pro endpoint | | GET /public/pro/:slug |
@@ -126,3 +95,21 @@ mongosh -u admin -p admin
 use tipeak
 show collections
 db.collection.find()
+
+```
+---
+
+### Manipuler les commandes git
+
+
+git status
+git branch
+
+git chekout -b feature/FXX-feature-name
+git add file1 file2
+git commit -m "commit message"
+git push origin featre/FXX-feature-name
+[Create PR and Merge in Github]
+git checkout main
+git pull origin main
+
