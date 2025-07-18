@@ -15,6 +15,7 @@ const { connectDB } = require('./config/db');
 // Routes
 const healthRouter = require('./routes/health');
 const authRouter   = require('./routes/auth');
+const usersRouter  = require('./routes/users');
 
 async function bootstrap() {
   // 1) Connexion Mongo
@@ -31,7 +32,7 @@ async function bootstrap() {
   // 4) Routes
   app.use('/api/health', healthRouter);
   app.use('/api/auth', authRouter);
-
+  app.use('/api/users', usersRouter);
   // debug root
   app.get('/', (req, res) => {
     res.send('Tipeak API en ligne (F01 DB connectée).');
