@@ -1,46 +1,57 @@
 // server/src/server.js
 // ------------------------------------------------------
-// Serveur Express minimal pour F00
-// Objectif : démarrer une API sur PORT (default 3000)
-// et répondre à /api/health.
-// Pas encore de DB, Auth, etc. -> viendront dans F01+.
+// Point d'entrée serveur Express.
+// Ajouts F01 : connexion Mongo avant écoute HTTP.
 // ------------------------------------------------------
 
-require('dotenv').config(); // charge variables depuis server/.env
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
-// Créer app Express
-const app = express();
+// Connexion DB
+const { connectDB } = require('./config/db');
 
-// Middlewares de base
-app.use(cors());                       // autorise requêtes cross-origin (front -> back)
-app.use(express.json());               // parse JSON dans req.body
-app.use(express.urlencoded({ extended: false })); // si besoin form-data simple
-
-// --- Routes -------------------------------------------------
+// Routes
 const healthRouter = require('./routes/health');
-app.use('/api/health', healthRouter);
 
-// (Plus tard) app.use('/api/auth', ...); etc.
+async function bootstrap() {
+  // 1) Connexion Mongo
+  await connectDB(); // crash process si échec
 
-// Route racine pour debug rapide
-app.get('/', (req, res) => {
-  res.send('Tip MVP API (F00) en ligne.');
-});
+  // 2) Création app
+  const app = express();
 
-// --- Lancement serveur --------------------------------------
-const PORT = process.env.PORT || 3000;
+  // 3) Middlewares
+  app.use(cors());
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
 
-// __dirname = server/src ; on remonte d'un cran pour log root
-const rootPath = path.resolve(__dirname, '..');
+  // 4) Routes
+  app.use('/api/health', healthRouter);
 
-app.listen(PORT, () => {
-  console.log('========================================');
-  console.log(`✅ API démarrée sur http://localhost:${PORT}`);
-  console.log(`📁 Racine serveur: ${rootPath}`);
-  console.log('Routes dispo:');
-  console.log(`  GET /api/health`);
-  console.log('========================================');
+  // debug root
+  app.get('/', (req, res) => {
+    res.send('Tip MVP API en ligne (F01 DB connectée).');
+  });
+
+  // 5) Lancement serveur
+  const PORT = process.env.PORT || 3000;
+  const rootPath = path.resolve(__dirname, '..');
+
+  app.listen(PORT, () => {
+    console.log('========================================');
+    console.log(`✅ API démarrée sur http://localhost:${PORT}`);
+    console.log('✅ DB connectée');
+    console.log(`📁 Racine serveur: ${rootPath}`);
+    console.log('Routes dispo:');
+    console.log(`  GET /api/health`);
+    console.log('========================================');
+  });
+}
+
+// Démarrer
+bootstrap().catch((err) => {
+  console.error('❌ Erreur bootstrap serveur:', err);
+  process.exit(1);
 });
