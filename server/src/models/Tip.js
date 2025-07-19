@@ -46,7 +46,7 @@ const TipSchema = new Schema(
   }
 );
 
-// Exemple index additionnel si besoin futur (période)
-TipSchema.index({ createdAt: -1 });
+// Index compound pour requêtes Dashboard (user + status + date)
+TipSchema.index({ user: 1, status: 1, createdAt: -1 }); // (1 = croissant, -1 = décroissant)
 
 module.exports = mongoose.model('Tip', TipSchema);
