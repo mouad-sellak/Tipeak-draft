@@ -12,11 +12,17 @@ const path = require('path');
 // Connexion DB
 const { connectDB } = require('./config/db');
 
+
 // Routes
 const healthRouter = require('./routes/health');
 const authRouter   = require('./routes/auth');
 const usersRouter  = require('./routes/users');
 const publicRouter = require('./routes/public');
+const tipsRouter   = require('./routes/tips');
+
+// Webhook (raw body)
+const stripeWebhookRouter = require('./routes/stripeWebhook');
+
 
 async function bootstrap() {
   // 1) Connexion Mongo
@@ -27,6 +33,10 @@ async function bootstrap() {
 
   // 3) Middlewares
   app.use(cors());
+
+   // 1) Monter webhook AVANT express.json()
+  app.use('/api/stripe/webhook', stripeWebhookRouter);
+  
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
 
@@ -35,6 +45,7 @@ async function bootstrap() {
   app.use('/api/auth', authRouter);
   app.use('/api/users', usersRouter);
   app.use('/api/public', publicRouter);
+  app.use('/api/tips', tipsRouter);
   // debug root
   app.get('/', (req, res) => {
     res.send('Tipeak API en ligne (F01 DB connectée).');
