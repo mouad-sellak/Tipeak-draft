@@ -96,6 +96,10 @@ use tipeak
 show collections
 db.collection.find()
 
+lsof -i :port
+docker logs stripe-cli --tail 50
+docker compose restart backend
+
 ```
 ---
 
