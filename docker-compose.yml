@@ -1,55 +1,63 @@
 version: "3.8"
 
 services:
-  mongo:
-    image: mongo:7
-    container_name: mongo-tipeak
-    restart: unless-stopped
-    environment:
-      MONGO_INITDB_DATABASE: tipeak
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodata:/data/db
-    networks: [tipeaknet]
-    healthcheck:
-      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 }).ok"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    mongo:
+        image: mongo:7
+        container_name: mongo-tipeak
+        restart: unless-stopped
+        environment:
+            MONGO_INITDB_DATABASE: tipeak
+            MONGO_INITDB_ROOT_USERNAME: admin
+            MONGO_INITDB_ROOT_PASSWORD: admin
+        ports:
+            - "27017:27017"
+        volumes:
+            - mongodata:/data/db
+        networks: [ tipeaknet ]
+        healthcheck:
+            test: [ "CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 }).ok" ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
 
-  backend:
-    build: ./server
-    container_name: tipeak-backend
-    restart: unless-stopped
-    env_file: ./server/.env
-    depends_on:
-      mongo:
-        condition: service_healthy
-    ports:
-      - "3000:3000"
-    networks: [tipeaknet]
+    backend:
+        build: ./server
+        container_name: tipeak-backend
+        restart: unless-stopped
+        env_file: ./server/.env
+        depends_on:
+            mongo:
+                condition: service_healthy
+        ports:
+            - "3000:3000"
+        networks: [ tipeaknet ]
 
-  stripe-cli:
-    image: stripe/stripe-cli:latest
-    container_name: stripe-cli
-    restart: unless-stopped
-    volumes:
-      - stripeconf:/root/.config/stripe
-    depends_on:
-      - backend
-    command: >
-      listen
-      --forward-to http://backend:3000/api/stripe/webhook
-      --events checkout.session.completed,payment_intent.payment_failed,charge.refunded
-    networks: [tipeaknet]
+    web:
+        build: ./client
+        container_name: tipeak-web
+        restart: unless-stopped
+        depends_on: [ backend ]
+        ports:
+            - "80:80"
+        networks: [ tipeaknet ]
+
+    stripe-cli:
+        image: stripe/stripe-cli:latest
+        container_name: stripe-cli
+        restart: unless-stopped
+        volumes:
+            - stripeconf:/root/.config/stripe
+        depends_on:
+            - backend
+        command: >
+            listen --forward-to http://backend:3000/api/stripe/webhook --events checkout.session.completed,payment_intent.payment_failed,charge.refunded
+        networks: [ tipeaknet ]
 
 volumes:
-  mongodata:
-  stripeconf:
+    mongodata:
+    stripeconf:
+
 
 networks:
-  tipeaknet:
-    driver: bridge
+    tipeaknet:
+        driver: bridge
